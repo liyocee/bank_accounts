@@ -7,12 +7,16 @@ import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
 
 @RegisterMapper(AccountTransactionMapper.class)
-public interface AccountTransactionDao {
+public interface AccountTransactionDao extends BaseDao {
+
+  static final Logger LOGGER = LoggerFactory.getLogger(AccountTransactionDao.class);
 
   @SqlUpdate("CREATE TABLE IF NOT EXISTS account_transaction (" +
       "id BIGINT(20) PRIMARY KEY AUTO_INCREMENT, " +
@@ -24,7 +28,8 @@ public interface AccountTransactionDao {
       "timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)")
   void createTable();
 
-  @SqlUpdate("insert into account_transaction (" +
+  @SqlUpdate("INSERT INTO account_transaction (" +
+      "id," +
       "debit_amount," +
       "debit_account," +
       "credit_amount," +
@@ -36,7 +41,7 @@ public interface AccountTransactionDao {
       ":credit_amount," +
       ":credit_account," +
       ":transaction_id," +
-      ":timestamp)")
+      ":timestamp) VALUES(:id, :debitAmount, :debitAccount, :creditAmount, :creditAccount, :transactionId, :timestamp)")
   void insert(@BindBean AccountTransaction accountTransaction);
 
   @SqlQuery("SELECT * FROM account_transaction LIMIT :limit")
@@ -44,4 +49,9 @@ public interface AccountTransactionDao {
 
   @SqlQuery("SELECT * FROM account_transaction WHERE id = :id")
   Optional<AccountTransaction> findById(@Bind("id") int id);
+
+  @Override
+  default void seedData() {
+    LOGGER.info("Skipping seed for account_transaction table");
+  }
 }
