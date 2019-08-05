@@ -2,6 +2,7 @@ package com.liyosi.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.liyosi.api.account.transfer.AccountTransferTransaction;
+import com.liyosi.api.account.transfer.exceptions.TransferFailedException;
 import com.liyosi.api.account.transfer.results.AccountTransferResults;
 import com.liyosi.core.AccountService;
 import org.slf4j.Logger;
@@ -28,7 +29,8 @@ public class AccountResource {
   @POST
   @Timed
   @Path("/transfer")
-  public AccountTransferResults transfer(@NotNull @Valid AccountTransferTransaction accountTransferTransaction) {
+  public AccountTransferResults transfer(
+      @NotNull @Valid AccountTransferTransaction accountTransferTransaction) throws TransferFailedException {
     LOGGER.info(
         "About to initiate transfer from account: {} to account: {}",
         accountTransferTransaction.getFrom(),

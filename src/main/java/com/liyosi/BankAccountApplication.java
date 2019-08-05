@@ -1,6 +1,9 @@
 package com.liyosi;
 
+import com.liyosi.api.account.transfer.exceptions.TransferFailedExceptionMapper;
 import com.liyosi.core.AccountService;
+import com.liyosi.core.currency.CurrencyConversionService;
+import com.liyosi.core.currency.CurrencyRatesCache;
 import com.liyosi.db.dao.*;
 import com.liyosi.resources.AccountResource;
 import io.dropwizard.Application;
@@ -49,9 +52,13 @@ public class BankAccountApplication extends Application<BankAaccountConfiguratio
 
     this.seedData(daos);
 
-    final AccountService accountService = new AccountService(accountDao, accountTransactionDao, currencyDao);
-    environment.jersey().register(new AccountResource(accountService));
+    final CurrencyRatesCache currencyRatesCache = new CurrencyRatesCache();
 
+    final CurrencyConversionService currencyConversionService = new CurrencyConversionService(currencyRatesCache);
+
+    final AccountService accountService = new AccountService(accountDao, accountTransactionDao, currencyDao, currencyConversionService);
+    environment.jersey().register(new AccountResource(accountService));
+    environment.jersey().register(new TransferFailedExceptionMapper());
 
     LOGGER.info("Customers are : ", customerDao.getAll(10L));
   }
@@ -66,6 +73,4 @@ public class BankAccountApplication extends Application<BankAaccountConfiguratio
     LOGGER.info("Creating seed data");
     daoList.forEach(BaseDao::seedData);
   }
-
-
 }

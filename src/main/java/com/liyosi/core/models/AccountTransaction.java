@@ -19,6 +19,9 @@ public class AccountTransaction extends BaseModel {
   private BigDecimal creditAmount;
 
   @NotNull
+  private BigDecimal conversionRate;
+
+  @NotNull
   private Long creditAccount;
 
   @NotNull
@@ -29,6 +32,7 @@ public class AccountTransaction extends BaseModel {
       BigDecimal debitAmount,
       Long debitAccount,
       BigDecimal creditAmount,
+      BigDecimal conversionRate,
       Long creditAccount,
       String transactionId,
       Timestamp timestamp) {
@@ -39,6 +43,7 @@ public class AccountTransaction extends BaseModel {
     this.creditAmount = creditAmount;
     this.creditAccount = creditAccount;
     this.timestamp = timestamp;
+    this.conversionRate = conversionRate;
   }
 
   public BigDecimal getDebitAmount() {
@@ -63,5 +68,9 @@ public class AccountTransaction extends BaseModel {
 
   public String getTransactionId() {
     return transactionId;
+  }
+
+  public BigDecimal getConversionRate() {
+    return conversionRate;
   }
 }

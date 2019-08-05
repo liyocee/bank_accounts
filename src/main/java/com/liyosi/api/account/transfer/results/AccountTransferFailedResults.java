@@ -2,14 +2,14 @@ package com.liyosi.api.account.transfer.results;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.liyosi.api.account.transfer.AccountTransferTransaction;
-import com.liyosi.api.account.transfer.failreasons.TransferFailedReason;
+import com.liyosi.api.account.transfer.exceptions.TransferFailedException;
 
 import javax.validation.constraints.NotNull;
 
 public class AccountTransferFailedResults  extends AccountTransferResults {
 
   @NotNull
-  private TransferFailedReason reason;
+  private TransferFailedException reason;
 
   public AccountTransferFailedResults() {
   }
@@ -20,7 +20,7 @@ public class AccountTransferFailedResults  extends AccountTransferResults {
   }
 
   @JsonProperty("reason")
-  public TransferFailedReason getReason() {
+  public TransferFailedException getReason() {
     return reason;
   }
 }

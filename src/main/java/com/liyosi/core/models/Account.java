@@ -2,6 +2,7 @@ package com.liyosi.core.models;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class Account extends BaseModel {
@@ -29,6 +30,9 @@ public class Account extends BaseModel {
  private Long currencyId;
 
  @NotNull
+ private BigDecimal balance;
+
+ @NotNull
  private AccountStatus status = AccountStatus.ACTIVE;
 
  public Account(
@@ -39,7 +43,8 @@ public class Account extends BaseModel {
      Timestamp openedOn,
      Timestamp closedOn,
      Long currencyId,
-     AccountStatus status) {
+     AccountStatus status,
+     BigDecimal balance) {
   super(id);
   this.customerId = customerId;
   this.name = name;
@@ -48,6 +53,7 @@ public class Account extends BaseModel {
   this.closedOn = closedOn;
   this.currencyId = currencyId;
   this.status = status;
+  this.balance = balance;
  }
 
  public Long getCustomerId() {
@@ -76,6 +82,10 @@ public class Account extends BaseModel {
 
  public AccountStatus getStatus() {
   return status;
+ }
+
+ public BigDecimal getBalance() {
+  return balance;
  }
 }
 

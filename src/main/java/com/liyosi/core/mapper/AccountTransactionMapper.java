@@ -15,6 +15,7 @@ public class AccountTransactionMapper implements ResultSetMapper<AccountTransact
         resultSet.getBigDecimal("debit_amount"),
         resultSet.getLong("debit_account"),
         resultSet.getBigDecimal("credit_amount"),
+        resultSet.getBigDecimal("conversion_rate"),
         resultSet.getLong("credit_account"),
         resultSet.getString("transaction_id"),
         resultSet.getTimestamp("timestamp")
