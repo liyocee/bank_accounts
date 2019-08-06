@@ -21,7 +21,8 @@ public class AccountMapper implements ResultSetMapper<Account> {
         resultSet.getTimestamp("opened_on"),
         resultSet.getTimestamp("closed_on"),
         resultSet.getLong("currency_id"),
-        Account.AccountStatus.valueOf(resultSet.getString("status"))
+        Account.AccountStatus.valueOf(resultSet.getString("status")),
+        resultSet.getBigDecimal("balance")
     );
   }
 }

@@ -26,6 +26,10 @@ public interface CurrencyDao extends BaseDao {
   @SqlQuery("SELECT * FROM currency WHERE id = :id")
   Currency findById(@Bind("id") Long id);
 
+  @SqlQuery("SELECT * FROM currency WHERE iso_code = :isoCode")
+  Currency findByIsoCode(@Bind("isoCode") String isoCode);
+
+
   @SqlUpdate("DELETE FROM currency WHERE id = :id")
   void deleteById(@Bind("id") Long id);
 
