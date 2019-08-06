@@ -17,4 +17,5 @@ public class BankAaccountConfiguration extends Configuration {
   public DataSourceFactory getDataSourceFactory() {
     return database;
   }
+
 }

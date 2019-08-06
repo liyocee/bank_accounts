@@ -18,6 +18,7 @@ public class AccountTransferTransaction {
   @NotBlank
   private String to;
 
+  @NotBlank
   private BigDecimal amount;
 
   @NotEmpty

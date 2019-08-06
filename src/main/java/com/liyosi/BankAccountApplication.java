@@ -4,11 +4,13 @@ import com.liyosi.api.account.transfer.exceptions.TransferFailedExceptionMapper;
 import com.liyosi.core.AccountService;
 import com.liyosi.core.currency.CurrencyConversionService;
 import com.liyosi.core.currency.CurrencyRatesCache;
+import com.liyosi.core.exceptions.ConstraintViolationExceptionMapper;
 import com.liyosi.db.dao.*;
 import com.liyosi.db.repository.TransactionRepository;
 import com.liyosi.resources.AccountResource;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.server.AbstractServerFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.skife.jdbi.v2.DBI;
@@ -39,6 +41,9 @@ public class BankAccountApplication extends Application<BankAaccountConfiguratio
   public void run(final BankAaccountConfiguration configuration,
                   final Environment environment) {
 
+    AbstractServerFactory serverFactory = (AbstractServerFactory) configuration.getServerFactory();
+    serverFactory.setRegisterDefaultExceptionMappers(false);
+
     final DBIFactory dbiFactory = new DBIFactory();
     final DBI jdbi = dbiFactory.build(environment, configuration.getDataSourceFactory(), "h2");
 
@@ -67,6 +72,7 @@ public class BankAccountApplication extends Application<BankAaccountConfiguratio
 
     environment.jersey().register(new AccountResource(accountService));
     environment.jersey().register(new TransferFailedExceptionMapper());
+    environment.jersey().register(new ConstraintViolationExceptionMapper());
   }
 
   private void createTables(List<BaseDao> daoList) {

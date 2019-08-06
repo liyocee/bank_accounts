@@ -13,6 +13,7 @@ import com.liyosi.db.dao.AccountTransactionDao;
 import com.liyosi.db.dao.CurrencyDao;
 import com.liyosi.db.repository.TransactionRepository;
 
+import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
+@Singleton
 public class AccountService {
 
   private AccountDao accountDao;
