@@ -14,6 +14,7 @@ import com.liyosi.core.models.Currency;
 import com.liyosi.db.dao.AccountDao;
 import com.liyosi.db.dao.AccountTransactionDao;
 import com.liyosi.db.dao.CurrencyDao;
+import com.liyosi.db.repository.TransactionRepository;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -32,15 +33,19 @@ public class AccountService {
 
   private CurrencyConversionService currencyConversionService;
 
+  private TransactionRepository transactionRepository;
+
   public AccountService(
       AccountDao accountDao,
       AccountTransactionDao accountTransactionDao,
       CurrencyDao currencyDao,
-      CurrencyConversionService currencyConversionService) {
+      CurrencyConversionService currencyConversionService,
+      TransactionRepository transactionRepository) {
     this.accountDao = accountDao;
     this.accountTransactionDao = accountTransactionDao;
     this.currencyDao = currencyDao;
     this.currencyConversionService = currencyConversionService;
+    this.transactionRepository = transactionRepository;
   }
 
   public @NotNull AccountTransferResults transfer(
@@ -71,7 +76,7 @@ public class AccountService {
     }
 
     // all checks have passed, apply transfer
-    createTransactions(fromAccount, toAccount, accountTransferTransaction.getAmount(), currency, convertedCurrency);
+    createTransactions(fromAccount, toAccount, accountTransferTransaction.getAmount(), convertedCurrency);
 
     return new AccountTransferSuccessfulResults(accountTransferTransaction);
   }
@@ -80,18 +85,14 @@ public class AccountService {
       Account from,
       Account to,
       BigDecimal amount,
-      Currency currency,
       CurrencyConversionService.ConvertedCurrency convertedCurrency) {
 
     String transactionId = UUID.randomUUID().toString();
 
     Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-    /**
-     * Todo - do it transactionally
-     */
 
-    // debit source account
-    accountTransactionDao.insert(new AccountTransaction(
+    // debit source account, credit target
+    AccountTransaction transaction = new AccountTransaction(
         new Random().nextLong(),
         amount,
         from.getId(),
@@ -100,10 +101,9 @@ public class AccountService {
         to.getId(),
         transactionId,
         currentTimestamp
-    ));
+    );
 
-    // update balances
-    accountDao.update(new Account(
+    Account updatedSourceAccount = new Account(
         from.getId(),
         from.getCustomerId(),
         from.getName(),
@@ -113,10 +113,9 @@ public class AccountService {
         from.getCurrencyId(),
         from.getStatus(),
         from.getBalance().subtract(amount)
-    ));
+    );
 
-    // update balances
-    accountDao.update(new Account(
+    Account updatedTargetAccount = new Account(
         to.getId(),
         to.getCustomerId(),
         to.getName(),
@@ -126,6 +125,7 @@ public class AccountService {
         to.getCurrencyId(),
         to.getStatus(),
         to.getBalance().add(amount)
-    ));
+    );
+    transactionRepository.transferMoney(transaction, updatedSourceAccount, updatedTargetAccount);
   }
 }

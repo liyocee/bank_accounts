@@ -5,6 +5,7 @@ import com.liyosi.core.AccountService;
 import com.liyosi.core.currency.CurrencyConversionService;
 import com.liyosi.core.currency.CurrencyRatesCache;
 import com.liyosi.db.dao.*;
+import com.liyosi.db.repository.TransactionRepository;
 import com.liyosi.resources.AccountResource;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi.DBIFactory;
@@ -45,6 +46,7 @@ public class BankAccountApplication extends Application<BankAaccountConfiguratio
     final CustomerDao customerDao = jdbi.onDemand(CustomerDao.class);
     final AccountDao accountDao = jdbi.onDemand(AccountDao.class);
     final AccountTransactionDao accountTransactionDao = jdbi.onDemand(AccountTransactionDao.class);
+    final TransactionRepository transactionRepository = jdbi.onDemand(TransactionRepository.class);
 
     List<BaseDao> daos = Arrays.asList(currencyDao, currencyDao, accountDao, accountTransactionDao, customerDao);
 
@@ -56,13 +58,16 @@ public class BankAccountApplication extends Application<BankAaccountConfiguratio
 
     final CurrencyConversionService currencyConversionService = new CurrencyConversionService(currencyRatesCache);
 
-    final AccountService accountService = new AccountService(accountDao, accountTransactionDao, currencyDao, currencyConversionService);
+    final AccountService accountService = new AccountService(
+        accountDao,
+        accountTransactionDao,
+        currencyDao,
+        currencyConversionService,
+        transactionRepository);
+
     environment.jersey().register(new AccountResource(accountService));
     environment.jersey().register(new TransferFailedExceptionMapper());
-
-    LOGGER.info("Customers are : ", customerDao.getAll(10L));
   }
-
 
   private void createTables(List<BaseDao> daoList) {
     LOGGER.info("Creating tables");
@@ -74,3 +79,4 @@ public class BankAccountApplication extends Application<BankAaccountConfiguratio
     daoList.forEach(BaseDao::seedData);
   }
 }
+
