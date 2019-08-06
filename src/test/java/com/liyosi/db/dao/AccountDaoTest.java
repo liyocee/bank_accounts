@@ -1,8 +1,6 @@
 package com.liyosi.db.dao;
 
 import com.liyosi.core.models.Account;
-import io.dropwizard.lifecycle.Managed;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,13 +24,6 @@ class AccountDaoTest extends BaseDaoTestCase {
     accountDao = dbi.open(AccountDao.class);
     accountDao.createTable();
     accountDao.seedData();
-  }
-
-  @AfterEach
-  void tearDown() throws Exception {
-    for (Managed obj : managed) {
-      obj.stop();
-    }
   }
 
   @Test

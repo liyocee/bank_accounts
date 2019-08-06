@@ -8,6 +8,7 @@ import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.logging.BootstrapLogging;
 import io.dropwizard.setup.Environment;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.ArgumentCaptor;
 import org.skife.jdbi.v2.DBI;
@@ -51,6 +52,13 @@ public class BaseDaoTestCase {
     managed.addAll(managedCaptor.getAllValues());
     for (Managed obj : managed) {
       obj.start();
+    }
+  }
+
+  @AfterEach
+  void tearDown() throws Exception {
+    for (Managed obj : managed) {
+      obj.stop();
     }
   }
 }
