@@ -9,7 +9,6 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 import java.util.Arrays;
-import java.util.List;
 
 @RegisterMapper(CurrencyMapper.class)
 public interface CurrencyDao extends BaseDao {
@@ -20,8 +19,6 @@ public interface CurrencyDao extends BaseDao {
   @SqlUpdate("INSERT INTO currency (id, iso_code) VALUES (:id, :isoCode)")
   void insert(@BindBean Currency currency);
 
-  @SqlQuery("SELECT * FROM currency LIMIT :limit")
-  List<Currency> getAll(@Bind("limit") Long limit);
 
   @SqlQuery("SELECT * FROM currency WHERE id = :id")
   Currency findById(@Bind("id") Long id);

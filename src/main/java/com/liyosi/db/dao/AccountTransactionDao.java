@@ -10,8 +10,6 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 @RegisterMapper(AccountTransactionMapper.class)
 public interface AccountTransactionDao extends BaseDao {
 
@@ -24,7 +22,7 @@ public interface AccountTransactionDao extends BaseDao {
       "credit_account BIGINT(20) NOT NULL," +
       "credit_amount DECIMAL(15,4) NOT NULL," +
       "conversion_rate DECIMAL(15,4) NOT NULL," +
-      "transaction_id VARCHAR(255) NOT NULL," +
+      "transaction_id VARCHAR(255) NOT NULL UNIQUE," +
       "timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)")
   void createTable();
 
@@ -39,11 +37,8 @@ public interface AccountTransactionDao extends BaseDao {
       "timestamp) VALUES(:id, :debitAmount, :debitAccount, :creditAmount, :conversionRate, :creditAccount, :transactionId, :timestamp)")
   void insert(@BindBean AccountTransaction accountTransaction);
 
-  @SqlQuery("SELECT * FROM account_transaction LIMIT :limit")
-  List<AccountTransaction> getAll(@Bind("limit") Long limit);
-
   @SqlQuery("SELECT * FROM account_transaction WHERE id = :id")
-  AccountTransaction findById(@Bind("id") int id);
+  AccountTransaction findById(@Bind("id") Long id);
 
   @Override
   default void seedData() {
