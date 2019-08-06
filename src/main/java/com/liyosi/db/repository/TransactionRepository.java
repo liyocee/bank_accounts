@@ -18,7 +18,7 @@ public abstract class TransactionRepository {
   @Transaction
   public void transferMoney(AccountTransaction accountTransaction, Account sourceAccount, Account targetAccount) {
     accountTransactionDao().insert(accountTransaction);
-    accountDao().update(sourceAccount);
-    accountDao().update(targetAccount);
+    accountDao().updateBalance(sourceAccount);
+    accountDao().updateBalance(targetAccount);
   }
 }

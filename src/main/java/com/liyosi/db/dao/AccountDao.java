@@ -41,7 +41,7 @@ public interface AccountDao extends BaseDao {
   void insert(@BindBean Account account);
 
   @SqlQuery("SELECT * FROM account WHERE id = :id")
-  Account findById(@Bind("id") int id);
+  Account findById(@Bind("id") Long id);
 
   @SqlQuery("SELECT * FROM account WHERE number = :number")
   Account findByAccountNumber(@Bind("number") String number);
@@ -51,7 +51,7 @@ public interface AccountDao extends BaseDao {
   void deleteById(@Bind("id") Long id);
 
   @SqlUpdate("UPDATE account SET balance = :balance WHERE id = :id")
-  int update(@BindBean Account account);
+  int updateBalance(@BindBean Account account);
 
   @Override
   default void seedData() {
