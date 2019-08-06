@@ -9,7 +9,6 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 import java.util.Arrays;
-import java.util.List;
 
 @RegisterMapper(CustomerMapper.class)
 public interface CustomerDao extends BaseDao {
@@ -20,12 +19,9 @@ public interface CustomerDao extends BaseDao {
   @SqlUpdate("INSERT INTO customer (id, name) VALUES (:id, :name)")
   void insert(@BindBean Customer customer);
 
-  @SqlQuery("SELECT * FROM customer LIMIT :limit")
-  List<Customer> getAll(@Bind("limit") Long limit);
 
   @SqlQuery("SELECT * FROM customer WHERE id = :id")
-  Customer findById(@Bind("id") int id);
-
+  Customer findById(@Bind("id") Long id);
 
   @SqlUpdate("DELETE FROM customer WHERE id = :id")
   void deleteById(@Bind("id") Long id);
