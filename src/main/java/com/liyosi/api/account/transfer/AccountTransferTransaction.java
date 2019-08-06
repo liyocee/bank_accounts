@@ -6,6 +6,7 @@ import io.dropwizard.jackson.JsonSnakeCase;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @JsonSnakeCase
@@ -18,7 +19,7 @@ public class AccountTransferTransaction {
   @NotBlank
   private String to;
 
-  @NotBlank
+  @NotNull
   private BigDecimal amount;
 
   @NotEmpty
