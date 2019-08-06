@@ -11,7 +11,6 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.List;
 
 
 @RegisterMapper(AccountMapper.class)
@@ -40,9 +39,6 @@ public interface AccountDao extends BaseDao {
       "currency_id," +
       "status) VALUES (:id, :customerId, :name, :balance, :number, :openedOn, :closedOn, :currencyId, :status)")
   void insert(@BindBean Account account);
-
-  @SqlQuery("SELECT * FROM account LIMIT :limit")
-  List<Account> getAll(@Bind("limit") Long limit);
 
   @SqlQuery("SELECT * FROM account WHERE id = :id")
   Account findById(@Bind("id") int id);

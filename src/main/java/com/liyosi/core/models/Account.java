@@ -87,5 +87,9 @@ public class Account extends BaseModel {
  public BigDecimal getBalance() {
   return balance;
  }
+
+ public Boolean isActive() {
+  return this.status == AccountStatus.ACTIVE;
+ }
 }
 

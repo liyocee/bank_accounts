@@ -6,9 +6,8 @@ import com.liyosi.db.dao.AccountDao;
 import com.liyosi.db.dao.AccountTransactionDao;
 import org.skife.jdbi.v2.sqlobject.CreateSqlObject;
 import org.skife.jdbi.v2.sqlobject.Transaction;
-import org.skife.jdbi.v2.sqlobject.mixins.GetHandle;
 
-public abstract class TransactionRepository implements GetHandle {
+public abstract class TransactionRepository {
 
   @CreateSqlObject
   abstract AccountDao accountDao();

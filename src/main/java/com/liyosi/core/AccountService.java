@@ -1,10 +1,7 @@
 package com.liyosi.core;
 
 import com.liyosi.api.account.transfer.AccountTransferTransaction;
-import com.liyosi.api.account.transfer.exceptions.AccountDoesNotExistException;
-import com.liyosi.api.account.transfer.exceptions.BalanceInsufficientException;
-import com.liyosi.api.account.transfer.exceptions.InvalidCurrencyCodeException;
-import com.liyosi.api.account.transfer.exceptions.TransferFailedException;
+import com.liyosi.api.account.transfer.exceptions.*;
 import com.liyosi.api.account.transfer.results.AccountTransferResults;
 import com.liyosi.api.account.transfer.results.AccountTransferSuccessfulResults;
 import com.liyosi.core.currency.CurrencyConversionService;
@@ -65,6 +62,10 @@ public class AccountService {
         .findByAccountNumber(accountTransferTransaction.getTo()))
         .orElseThrow(() -> new AccountDoesNotExistException(accountTransferTransaction.getTo()));
 
+    // Is source account active
+    this.checkIfAccountIsActive(fromAccount);
+    this.checkIfAccountIsActive(toAccount);
+
     Currency targetAccountCurrency = currencyDao.findById(toAccount.getCurrencyId());
 
     CurrencyConversionService.ConvertedCurrency convertedCurrency = currencyConversionService.convert(
@@ -79,6 +80,12 @@ public class AccountService {
     createTransactions(fromAccount, toAccount, accountTransferTransaction.getAmount(), convertedCurrency);
 
     return new AccountTransferSuccessfulResults(accountTransferTransaction);
+  }
+
+  private void checkIfAccountIsActive(Account account) throws AccountIsInActiveExistException{
+    if (!account.isActive()) {
+      throw new AccountIsInActiveExistException(account.getNumber()) ;
+    }
   }
 
   private void createTransactions(
