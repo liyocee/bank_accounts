@@ -109,6 +109,13 @@ class AccountServiceTest {
   }
 
   @Test
+  void transfer_ThrowAccountUnsupportedCurrencyException_SourceAccountHasDifferentCurrency() {
+    doReturn(new Currency(14L, "UGX")).when(mockCurrencyDao).findByIsoCode(ArgumentMatchers.any());
+    doReturn(sourceAccount).when(mockAccountDao).findByAccountNumber(accountTransferTransaction.getFrom());
+    assertThrows(AccountUnsupportedCurrencyException.class, () -> accountService.transfer(accountTransferTransaction));
+  }
+
+  @Test
   void transfer_ThrowAccountDoesNotExistException_MissingTargetAccount() {
     doReturn(currency).when(mockCurrencyDao).findByIsoCode(ArgumentMatchers.any());
     doReturn(sourceAccount).when(mockAccountDao).findByAccountNumber(accountTransferTransaction.getFrom());

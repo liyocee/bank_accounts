@@ -59,6 +59,11 @@ public class AccountService {
         .findByAccountNumber(accountTransferTransaction.getFrom()))
         .orElseThrow(() -> new AccountDoesNotExistException(accountTransferTransaction.getFrom()));
 
+    // Ensure the source account has the same currency as the supplied account
+    if (!fromAccount.getCurrencyId().equals(currency.getId())) {
+      throw new AccountUnsupportedCurrencyException(fromAccount.getNumber(), currency.getIsoCode());
+    }
+
     // Does the destination account exist
     Account toAccount = Optional.ofNullable(accountDao
         .findByAccountNumber(accountTransferTransaction.getTo()))

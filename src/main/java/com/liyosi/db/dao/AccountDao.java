@@ -60,7 +60,9 @@ public interface AccountDao extends BaseDao {
         new Account(1L, 1L, "Current Account - Salary", "acc_001",
             currentTimestamp, currentTimestamp, 1L, Account.AccountStatus.ACTIVE, new BigDecimal(1000)),
         new Account(2L, 2L, "Current Account - Bills", "acc_002",
-            currentTimestamp, currentTimestamp, 1L, Account.AccountStatus.ACTIVE, new BigDecimal(0)))
+            currentTimestamp, currentTimestamp, 1L, Account.AccountStatus.ACTIVE, new BigDecimal(0)),
+        new Account(3L, 2L, "Current Account - Entertainment", "acc_003",
+            currentTimestamp, currentTimestamp, 2L, Account.AccountStatus.ACTIVE, new BigDecimal(50)))
         .forEach(account -> {
           this.deleteById(account.getId());
           this.insert(account);
