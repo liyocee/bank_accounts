@@ -47,7 +47,7 @@ public class AccountService {
     this.transactionRepository = transactionRepository;
   }
 
-  public @NotNull AccountTransferResults transfer(
+  public @NotNull synchronized AccountTransferResults transfer(
       @NotNull AccountTransferTransaction accountTransferTransaction) throws TransferFailedException {
     // Does the currency code exist
     Currency currency = Optional.ofNullable(currencyDao
