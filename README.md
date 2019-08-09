@@ -1,5 +1,4 @@
-# bank-account
-
+# Sample Implementation of money transfer between accounts
 How to start the bank-account application
 ---
 
@@ -31,3 +30,6 @@ To see your applications health enter url `http://localhost:8081/healthcheck`
 	"iso_currency_code": "USD"
 }
 ```
+
+# Running unit tests
+1. Run command:  `mvn test`
